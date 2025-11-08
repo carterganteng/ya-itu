@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special Surprise For You</title>
+    <link href="https://fonts.googleapis.com/css2?family=Chewy&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Chewy', cursive;
+            background: url('pink.jpg') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #ff6b93;
+            overflow-x: hidden;
+            position: relative;
+            padding: 20px;
+        }
+
+        /* Floating background icons */
+        .floating-icon {
+            position: fixed;
+            z-index: -1;
+            opacity: 0.7;
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg) scale(1); }
+            50% { transform: translateY(-25px) rotate(10deg) scale(1.1); }
+            100% { transform: translateY(0) rotate(0deg) scale(1); }
+        }
+
+        /* Create multiple floating icons with different animations */
+        .floating-icon:nth-child(1) { width: 50px; top: 15%; left: 8%; animation-delay: 0s; }
+        .floating-icon:nth-child(2) { width: 65px; top: 75%; left: 88%; animation-delay: 1s; }
+        .floating-icon:nth-child(3) { width: 45px; top: 45%; left: 92%; animation-delay: 2s; }
+        .floating-icon:nth-child(4) { width: 55px; top: 85%; left: 12%; animation-delay: 0.5s; }
+        .floating-icon:nth-child(5) { width: 60px; top: 25%; left: 85%; animation-delay: 1.5s; }
+        .floating-icon:nth-child(6) { width: 40px; top: 65%; left: 5%; animation-delay: 2.5s; }
+        .floating-icon:nth-child(7) { width: 70px; top: 35%; left: 3%; animation-delay: 3s; }
+        .floating-icon:nth-child(8) { width: 48px; top: 55%; left: 90%; animation-delay: 0.8s; }
+
+        /* Screens */
+        .screen {
+            background-color: rgba(255, 255, 255, 0.92);
+            border-radius: 25px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(255, 107, 147, 0.2);
+            width: 100%;
+            max-width: 600px;
+            border: 4px solid #ffb6c1;
+            position: relative;
+            z-index: 10;
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.8s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Typography */
+        h1 {
+            color: #ff6b93;
+            margin-bottom: 15px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 0 #ffb6c1;
+        }
+
+        h2 {
+            color: #ff85a2;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 0 #ffd1dc;
+        }
+
+        p {
+            color: #ff6b93;
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        /* Password Game Screen */
+        .password-game {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .password-icon {
+            width: 120px;
+            height: 120px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: bounce 2s infinite;
+            filter: drop-shadow(0 5px 15px rgba(255, 107, 147, 0.3));
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .password-icon:hover {
+            transform: scale(1.1) rotate(5deg);
+            filter: drop-shadow(0 8px 20px rgba(255, 107, 147, 0.5));
+        }
+
+        .password-icon:active {
+            transform: scale(0.95);
+        }
+
+        .click-counter {
+            font-size: 1.4rem;
+            color: #ff6b93;
+            background: rgba(255, 182, 193, 0.2);
+            padding: 10px 25px;
+            border-radius: 50px;
+            border: 2px dashed #ffb6c1;
+        }
+
+        .click-counter span {
+            font-weight: bold;
+            color: #ff4d7a;
+            font-size: 1.6rem;
+        }
+
+        /* Pretty Person Screen */
+        .pretty-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .pretty-photo {
+            width: 250px;
+            height: 250px;
+            border-radius: 20px;
+            object-fit: cover;
+            border: 5px solid #ffb6c1;
+            box-shadow: 0 10px 25px rgba(255, 107, 147, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .pretty-photo:hover {
+            transform: scale(1.03);
+        }
+
+        .comments-section {
+            background: rgba(255, 214, 224, 0.3);
+            border-radius: 20px;
+            padding: 20px;
+            border: 2px solid #ffd1dc;
+            max-height: 200px;
+            overflow-y: auto;
+            width: 100%;
+        }
+
+        .comment {
+            background: white;
+            padding: 12px 18px;
+            margin: 10px 0;
+            border-radius: 15px;
+            border-left: 4px solid #ffb6c1;
+            animation: slideIn 0.5s ease;
+            box-shadow: 0 3px 10px rgba(255, 107, 147, 0.1);
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Music Screen */
+        .music-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .music-player {
+            background: linear-gradient(135deg, #ffd1dc 0%, #ffebf3 100%);
+            border-radius: 20px;
+            padding: 25px;
+            border: 3px solid #ffb6c1;
+            box-shadow: 0 10px 25px rgba(255, 107, 147, 0.2);
+            width: 100%;
+        }
+
+        .music-btn {
+            background: #ff6b93;
+            color: white;
+            border: none;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 107, 147, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+
+        .music-btn:hover {
+            background: #ff4d7a;
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 8px 20px rgba(255, 107, 147, 0.6);
+        }
+
+        .music-btn:active {
+            transform: scale(0.95);
+        }
+
+        .music-title {
+            color: #ff6b93;
+            font-size: 1.4rem;
+            margin-top: 15px;
+        }
+
+        /* Final Message Screen */
+        .final-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .heart-rain {
+            position: relative;
+            height: 100px;
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        .falling-heart {
+            position: absolute;
+            font-size: 24px;
+            opacity: 0;
+            animation: fall 3s linear forwards;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-50px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(200px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Buttons */
+        .btn {
+            background: linear-gradient(135deg, #ff6b93 0%, #ff85a2 100%);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-family: 'Chewy', cursive;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 107, 147, 0.4);
+            margin-top: 15px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 107, 147, 0.6);
+            background: linear-gradient(135deg, #ff4d7a 0%, #ff6b93 100%);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .watermark {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            font-size: 0.9rem;
+            color: rgba(255, 107, 147, 0.7);
+            z-index: 10;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 5px 12px;
+            border-radius: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .screen {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .password-icon {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .pretty-photo {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating background icons -->
+    <img src="assets/bun.png" class="floating-icon" alt="Bunny">
+    <img src="assets/bun2.png" class="floating-icon" alt="Bunny">
+    <img src="assets/bun3.png" class="floating-icon" alt="Bunny">
+    <img src="assets/bun.png" class="floating-icon" alt="Bunny">
+    <img src="assets/bun2.png" class="floating-icon" alt="assets/Bunny">
+    <img src="assets/bun3.png" class="floating-icon" alt="Bunny">
+    <img src="assets/bun.png" class="floating-icon" alt="Bunny">
+    <img src="assets/bun2.png" class="floating-icon" alt="Bunny">
+
+    <!-- Password Game Screen -->
+    <div class="screen active" id="passwordScreen">
+        <h1>Hey <span id="userName">1</span>!</h1>
+        <p>I made this website just for you! 💖</p>
+        <p>Finish the game to open the gift! 🎁</p>
+        
+        <div class="password-game">
+            <img src="assets/pass.png" class="password-icon" id="passwordIcon" alt="Click Me">
+            <div class="click-counter">
+                Click the icon <span id="clickCount">0</span>/10 times to continue!
+            </div>
+        </div>
+    </div>
+
+    <!-- Pretty Person Screen -->
+    <div class="screen" id="prettyScreen">
+        <h2>The Prettiest Person Ever Exist ✨</h2>
+        <div class="pretty-content">
+            <img src="assets/user_photo.jpg" class="pretty-photo" alt="Pretty Person">
+            <p>See what people say about you:</p>
+            <div class="comments-section" id="commentsSection">
+                <!-- Comments will be added here -->
+            </div>
+        </div>
+        <div class="nav-buttons">
+            <button class="btn" onclick="showScreen('passwordScreen')">← Back</button>
+            <button class="btn" onclick="showScreen('musicScreen')">Next →</button>
+        </div>
+    </div>
+
+    <!-- Music Screen -->
+    <div class="screen" id="musicScreen">
+        <h2>A Special Song For You 🎵</h2>
+        <div class="music-content">
+            <div class="music-player">
+                <button class="music-btn" id="musicBtn">
+                    <i class="fas fa-play"></i>
+                </button>
+                <div class="music-title">Can't Help Falling In Love</div>
+            </div>
+            <p>This song reminds me of how amazing you are! 💕</p>
+        </div>
+        <div class="nav-buttons">
+            <button class="btn" onclick="showScreen('prettyScreen')">← Back</button>
+            <button class="btn" onclick="showScreen('finalScreen')">Next →</button>
+        </div>
+    </div>
+
+    <!-- Final Message Screen -->
+    <div class="screen" id="finalScreen">
+        <h2>Just For You 💝</h2>
+        <div class="final-content">
+            <p>You're not just a star in my sky, you're the whole constellation.</p>
+            <p>Every day with you is a beautiful adventure.</p>
+            <p>Thank you for being exactly who you are! ✨</p>
+            
+            <div class="heart-rain" id="heartRain">
+                <!-- Hearts will be added here -->
+            </div>
+            
+            <p>Always remember how special you are! 💖</p>
+        </div>
+        <div class="nav-buttons">
+            <button class="btn" onclick="showScreen('musicScreen')">← Back</button>
+            <button class="btn" onclick="showScreen('passwordScreen')">Start Over</button>
+        </div>
+    </div>
+
+    <!-- Watermark -->
+    <div class="watermark">created with 💖 by @foocl on telegram</div>
+
+    <!-- Audio -->
+    <audio id="bgMusic" loop>
+        <source src="can.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Game elements
+            const passwordIcon = document.getElementById('passwordIcon');
+            const clickCount = document.getElementById('clickCount');
+            const commentsSection = document.getElementById('commentsSection');
+            const musicBtn = document.getElementById('musicBtn');
+            const bgMusic = document.getElementById('bgMusic');
+            const heartRain = document.getElementById('heartRain');
+            
+            // Game state
+            let clicks = 0;
+            let isMusicPlaying = false;
+            
+            // Compliments for the comments section
+            const compliments = [
+                "You have the most beautiful smile I've ever seen! 😊",
+                "Your energy lights up every room you enter! ✨",
+                "You're even more wonderful on the inside than on the outside! 💖",
+                "Your kindness inspires everyone around you! 🌟",
+                "You have a heart of gold! 🏆",
+                "Your positivity is contagious! 🌈",
+                "You make the world a better place just by being in it! 🌍",
+                "Your laughter is my favorite sound! 😄",
+                "You're incredibly strong and resilient! 💪",
+                "You have a beautiful soul that shines through! ✨",
+                "You're smart, funny, and absolutely amazing! 🎯",
+                "You deserve all the happiness in the world! 🥰"
+            ];
+            
+            // Password game functionality
+            passwordIcon.addEventListener('click', function() {
+                clicks++;
+                clickCount.textContent = clicks;
+                
+                // Add bounce effect
+                this.style.animation = 'none';
+                setTimeout(() => {
+                    this.style.animation = 'bounce 2s infinite';
+                }, 10);
+                
+                // Check if game is completed
+                if (clicks >= 10) {
+                    showScreen('prettyScreen');
+                    startComments();
+                }
+            });
+            
+            // Music player functionality
+            musicBtn.addEventListener('click', function() {
+                if (isMusicPlaying) {
+                    bgMusic.pause();
+                    musicBtn.innerHTML = '<i class="fas fa-play"></i>';
+                    isMusicPlaying = false;
+                } else {
+                    bgMusic.play();
+                    musicBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                    isMusicPlaying = true;
+                }
+            });
+            
+            // Show specific screen
+            window.showScreen = function(screenId) {
+                // Hide all screens
+                document.querySelectorAll('.screen').forEach(screen => {
+                    screen.classList.remove('active');
+                });
+                
+                // Show selected screen
+                document.getElementById(screenId).classList.add('active');
+                
+                // Special actions for specific screens
+                if (screenId === 'finalScreen') {
+                    startHeartRain();
+                }
+            };
+            
+            // Start comments animation
+            function startComments() {
+                let commentIndex = 0;
+                
+                const addComment = () => {
+                    if (commentIndex < compliments.length) {
+                        const comment = document.createElement('div');
+                        comment.className = 'comment';
+                        comment.textContent = compliments[commentIndex];
+                        commentsSection.appendChild(comment);
+                        
+                        // Scroll to bottom
+                        commentsSection.scrollTop = commentsSection.scrollHeight;
+                        
+                        commentIndex++;
+                        setTimeout(addComment, 1500);
+                    }
+                };
+                
+                addComment();
+            }
+            
+            // Start heart rain animation
+            function startHeartRain() {
+                const hearts = ['💖', '💕', '💝', '💗', '💓', '💞'];
+                
+                const createHeart = () => {
+                    const heart = document.createElement('div');
+                    heart.className = 'falling-heart';
+                    heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                    heart.style.left = Math.random() * 100 + '%';
+                    heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    heartRain.appendChild(heart);
+                    
+                    // Remove heart after animation
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 3000);
+                };
+                
+                // Create hearts periodically
+                setInterval(createHeart, 300);
+                
+                // Create initial hearts
+                for (let i = 0; i < 10; i++) {
+                    setTimeout(createHeart, i * 100);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
